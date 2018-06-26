@@ -1,1 +1,132 @@
-<!--blah de blah-->
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Whatever I Want</title>
+    <style>
+        #map-canvas{
+            height: 500px;
+        }
+    </style>
+</head>
+<body>
+<!--div to hold map-->
+<div id="map-canvas"></div>
+<script>
+//     function initMap() {
+//         var mapCanvas = document.getElementById('map-canvas');
+//         var mapOptions = {
+//             zoom: 11,
+//             center: {
+//                 lat:29.4231089,
+//                 lng:-98.48448380000002
+//             }
+//         };
+//         var map = new google.maps.Map(mapCanvas, mapOptions);
+// //Geo Coding
+//
+//         //RED MARKER
+//         var marker = new google.maps.Marker({
+//             position: {
+//                 lat:29.4231089,
+//                 lng:-98.48448380000002
+//
+//             },
+//             map: map
+//         });
+//
+//         var tongs = new google.maps.Marker({
+//             position: {
+//                 lat: 29.4865493,
+//                 lng: -98.44819889999997
+//             },
+//             map: map
+//         });
+//
+//
+//
+//
+//
+//
+//
+//
+//         //infowindows
+//         var infowindow = new google.maps.InfoWindow({
+//             content: '<h1>Fogo De Ch&atilde;o</h1><h5>Eat Here.<br>Come eat some meat with a side a meat!</h5>'
+//         });
+//
+//         infowindow.open(map, marker);
+//
+//
+//
+//
+//
+//     }
+
+function initMap() {
+    var map = new google.maps.Map(document.getElementById('map-canvas'), {
+        zoom: 10,
+        center: {
+            lat:29.426791,
+            lng:-98.48602
+        }
+    });
+        var geo = new google.maps.Geocoder();
+        // console.log(geo);
+        geo.geocode({address: '15069 I-35, Selma, TX 78154'}, function (response, status) {
+            // console.log(response);
+            // console.log(response[0].geometry.location.lat);
+            // console.log(response[0].geometry.location.lat["[[Scopes]]"]);
+            console.log(response[0].geometry.location.lat());
+            console.log(response[0].geometry.location.lng());
+            console.log(status);
+        });
+
+    setMarkers(map);
+}
+var restaurants = [
+    ['Fogo', 'Meat', 29.426791, -98.48602, 2],
+    ['Tongs', 'Thai', 29.4865493, -98.44819889999997, 1],
+    ['Pasha', 'Mediterranean', 29.5760426, -98.32516909999998, 3]
+];
+
+function setMarkers(map) {
+    for (var i = 0; i < restaurants.length; i++) {
+        var restaurant = restaurants[i];
+        var marker = new google.maps.Marker({
+            position: {lat: restaurant[2], lng: restaurant[3]},
+            map: map,
+            // title: restaurant[0],
+            zIndex: restaurant[4]
+        });
+        var infoWindow = new google.maps.InfoWindow({
+            content: '<h3>'+ restaurant[0] + '</h3>' + restaurant[1],
+            zIndex: restaurant[4]
+        });
+        infoWindow.open(map, marker);
+
+        // function markerBounce() {
+        google.maps.event.addListener(marker, "click", function(){
+          if ( marker.getAnimation() !== null) {
+              marker.setAnimation(null);
+            }  else {
+              marker.setAnimation(google.maps.Animation.BOUNCE);
+            }
+
+        });
+        // marker.addListener("mouseover", markerBounce);
+
+        // restaurants.addListener("mouseover", markerBounce);
+
+        console.log(restaurant);
+    }
+}
+
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCxIPbNd4ljI6NdSyP5ugk4XoKDzw2VEZM&callback=initMap" async defer></script>
+
+</body>
+</html>
